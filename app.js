@@ -669,14 +669,17 @@ function initPreview() {
     iframe.contentWindow.print();
   });
 
-  document.getElementById('btn-save').addEventListener('click', () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
-    const dlAnchorElem = document.createElement('a');
-    dlAnchorElem.setAttribute("href", dataStr);
-    dlAnchorElem.setAttribute("download", "amms_propuesta_data.json");
-    dlAnchorElem.click();
-    showToast('Datos guardados correctamente', 'success');
-  });
+  const btnDownloadJson = document.getElementById('btn-download-json');
+  if (btnDownloadJson) {
+    btnDownloadJson.addEventListener('click', () => {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+      const dlAnchorElem = document.createElement('a');
+      dlAnchorElem.setAttribute("href", dataStr);
+      dlAnchorElem.setAttribute("download", "amms_propuesta_data.json");
+      dlAnchorElem.click();
+      showToast('JSON exportado correctamente', 'success');
+    });
+  }
 }
 
 function generateHTML() {
