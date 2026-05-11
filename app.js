@@ -776,20 +776,35 @@ function generateHTML() {
   
   @page {
     size: A4;
-    margin: 0; /* This removes the default browser headers and footers (date, URL, etc) */
+    margin: 0; 
   }
   
   @media print {
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    body { background: #fff; margin: 0; }
-    .page { box-shadow:none; margin:0; padding: 20mm; page-break-after: always; min-height: 297mm; }
+    body { background: #fff; margin: 0; padding: 0; }
+    .page-container { margin:0; padding:0; box-shadow:none; }
+    .print-table { width: 100%; border-collapse: collapse; border: none; }
+    .print-table thead, .print-table tfoot { display: table-row-group; } /* To repeat on pages */
+    .print-table thead { display: table-header-group; }
+    .print-table tfoot { display: table-footer-group; }
+  }
+  @media screen {
+    .page-container { width:210mm; margin:10mm auto; background:#fff; box-shadow:var(--shadow-sm); position:relative; }
+    .print-table { display: block; }
+    .print-table thead, .print-table tfoot { display: none; }
+    .print-table tbody, .print-table tr, .print-table td { display: block; width: 100%; }
+    .print-content { padding: 20mm !important; }
   }
 </style>
 </head>
 <body>
-<!-- PAGINA 1 -->
-<section class="page">
-  <div class="page-inner">
+
+<div class="page-container">
+<table class="print-table">
+  <thead><tr><td style="height:20mm; border:none; padding:0;"></td></tr></thead>
+  <tbody>
+    <tr><td class="print-content" style="padding:0 20mm; border:none; vertical-align:top;">
+
     <div class="hero">
       <div class="eyebrow"><span class="dot"></span> ${state.general.cliente} - ${state.general.expediente}</div>
       <h1>${state.general.titulo}<br>${state.general.subtitulo}</h1>
@@ -821,12 +836,6 @@ function generateHTML() {
     </div>
     ` : ''}
 
-  </div>
-</section>
-
-<!-- PAGINA 2 -->
-<section class="page">
-  <div class="page-inner">
     <div class="section-header"><div class="section-number">${state.general.metodologia ? '2' : '1'}</div><h2>Estructura del equipo y valores hora</h2></div>
     <div style="border:1px solid var(--line); border-radius:18px; overflow:hidden;">
       <table>
@@ -871,19 +880,6 @@ function generateHTML() {
       </p>
     </div>
 
-  </div>
-</section>
-
-<!-- PAGINA 3 -->
-<section class="page">
-  <div class="page-inner">
-    <div class="note" style="margin-bottom:24px;">
-      <p style="margin:0; font-size:11px;">
-        <strong>Modalidad:</strong> ${state.notas.modalidad}<br>
-        <strong>Costos:</strong> ${state.notas.costos}<br>
-        <strong>Ajuste:</strong> ${state.notas.ajuste}
-      </p>
-    </div>
     <div class="section-header"><div class="section-number">${state.general.metodologia ? '4' : '3'}</div><h2>SLA, KPIs y calidad de servicio</h2></div>
     <div style="border:1px solid var(--line); border-radius:18px; overflow:hidden; margin-bottom:16px;">
       <table>
@@ -898,13 +894,31 @@ function generateHTML() {
       ${state.kpis.map(k => `<div class="kpi"><div class="num">${k.num}</div><div class="txt">${k.txt}</div></div>`).join('')}
     </div>
 
-    <div class="brand-footer" style="margin-top:40px;">
-      <div>AMMS Group · Software + Datos + Automatización · Propuesta corporativa</div>
+    <div class="note" style="margin-top:24px;">
+      <p style="margin:0; font-size:11px;">
+        <strong>Modalidad:</strong> ${state.notas.modalidad}<br>
+        <strong>Costos:</strong> ${state.notas.costos}<br>
+        <strong>Ajuste:</strong> ${state.notas.ajuste}
+      </p>
     </div>
-  </div>
-</section>
-</body></html>`;
 
+    <div class="brand-footer" style="margin-top:40px;">
+      <div><strong>AMMS Group</strong> — Generador de Propuestas</div>
+      <div>v${state.version || 1}.0</div>
+    </div>
+
+    </td></tr>
+  </tbody>
+  <tfoot><tr><td style="height:20mm; border:none; padding:0;"></td></tr></tfoot>
+</table>
+</div>
+
+</body>
+</html>
+  `;
+  
   const iframe = document.getElementById('preview-iframe');
-  iframe.srcdoc = htmlContent;
+  if (iframe) iframe.srcdoc = htmlContent;
+  
+  return htmlContent;
 }
