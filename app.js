@@ -772,11 +772,16 @@ function generateHTML() {
   .kpi .txt { margin-top:6px; font-size:11px; }
   .note { margin-top:12px; padding:14px; border-radius:16px; border:1px solid rgba(255,107,53,.20); background:rgba(255,107,53,.08); }
   .brand-footer { display:flex; justify-content:space-between; margin-top:18px; border-top:2px solid rgba(10,35,66,.08); padding-top:14px; font-size:11px; color:var(--muted); }
-  .brand-footer { display:flex; justify-content:space-between; margin-top:18px; border-top:2px solid rgba(10,35,66,.08); padding-top:14px; font-size:11px; color:var(--muted); }
+  
+  @page {
+    size: A4;
+    margin: 0; /* This removes the default browser headers and footers (date, URL, etc) */
+  }
+  
   @media print {
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    body { background: #fff; }
-    .page { box-shadow:none; margin:0; page-break-after: always; }
+    body { background: #fff; margin: 0; }
+    .page { box-shadow:none; margin:0; padding: 20mm; page-break-after: always; min-height: 297mm; }
   }
 </style>
 </head>
