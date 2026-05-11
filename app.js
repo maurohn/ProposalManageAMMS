@@ -159,7 +159,7 @@ async function loadProposalsList() {
       g.versions.sort((a, b) => b.version - a.version);
       const latest = g.versions[0];
       let versionsHtml = g.versions.map(v => 
-        `<span style="display:inline-block; margin:2px; padding:2px 6px; background:var(--paper-warm); border:1px solid var(--line); border-radius:4px; font-size:11px; color:var(--muted);" title="${new Date(v.created_at).toLocaleString()}">v${v.version}</span>`
+        `<span style="display:inline-block; margin:2px; padding:3px 8px; background:var(--paper-warm); border:1px solid var(--line); border-radius:4px; font-size:11px; color:var(--deep-navy); font-weight:600; cursor:pointer; transition:all 0.2s;" title="${new Date(v.created_at).toLocaleString()}" onclick="loadProposal('${g.uuid}', ${v.version})" onmouseover="this.style.background='var(--cyan-muted)';this.style.color='white'" onmouseout="this.style.background='var(--paper-warm)';this.style.color='var(--deep-navy)'">v${v.version}</span>`
       ).join('');
 
       html += `<tr style="border-bottom:1px solid var(--line); font-size:14px;">
@@ -181,16 +181,21 @@ async function loadProposalsList() {
   }
 }
 
-window.loadProposal = async function(uuid) {
+window.loadProposal = async function(uuid, targetVersionNum = null) {
   try {
     const res = await fetch('http://localhost:3000/api/propuestas/' + uuid);
     const versions = await res.json();
     if(versions.length > 0) {
-      const latest = versions[0];
-      const newState = latest.estado_json;
-      newState.uuid = latest.uuid;
+      let targetVersion = versions[0];
+      if (targetVersionNum !== null) {
+        const found = versions.find(v => v.version == targetVersionNum);
+        if (found) targetVersion = found;
+      }
+      
+      const newState = targetVersion.estado_json;
+      newState.uuid = targetVersion.uuid;
       loadState(newState);
-      showToast('Propuesta cargada (v'+latest.version+')', 'success');
+      showToast('Propuesta cargada (v' + targetVersion.version + ')', 'success');
       
       // Go to general tab
       const tabGeneral = document.querySelector('[data-panel="general"]') || document.querySelector('[data-target="general"]');
