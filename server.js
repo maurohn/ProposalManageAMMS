@@ -152,16 +152,10 @@ app.post('/api/propuestas', async (req, res) => {
 
 app.get('/api/propuestas', async (req, res) => {
   try {
-    // Get latest version of each uuid
     const result = await pool.query(`
-      SELECT p1.uuid, p1.cliente, p1.titulo, p1.version, p1.created_at
-      FROM propuestas p1
-      INNER JOIN (
-          SELECT uuid, MAX(version) as max_version
-          FROM propuestas
-          GROUP BY uuid
-      ) p2 ON p1.uuid = p2.uuid AND p1.version = p2.max_version
-      ORDER BY p1.created_at DESC;
+      SELECT uuid, cliente, titulo, version, created_at
+      FROM propuestas
+      ORDER BY created_at DESC;
     `);
     res.json(result.rows);
   } catch (error) {
@@ -178,6 +172,17 @@ app.get('/api/propuestas/:uuid', async (req, res) => {
   } catch (error) {
     console.error('DB Error:', error);
     res.status(500).json({ error: 'Error al cargar la propuesta' });
+  }
+});
+
+app.delete('/api/propuestas/:uuid', async (req, res) => {
+  try {
+    const { uuid } = req.params;
+    await pool.query('DELETE FROM propuestas WHERE uuid = $1', [uuid]);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('DB Error:', error);
+    res.status(500).json({ error: 'Error al eliminar la propuesta' });
   }
 });
 

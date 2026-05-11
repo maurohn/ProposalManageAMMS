@@ -114,6 +114,20 @@ async function saveToDB() {
   }
 }
 
+async function deleteProposal(uuid) {
+  if (!confirm('¿Seguro que deseas eliminar esta propuesta y todas sus versiones?')) return;
+  try {
+    const res = await fetch('http://localhost:3000/api/propuestas/' + uuid, { method: 'DELETE' });
+    if (res.ok) {
+      showToast('Propuesta eliminada', 'success');
+      loadProposalsList();
+      if (state.uuid === uuid) state.uuid = null;
+    }
+  } catch (e) {
+    showToast('Error al eliminar', 'warn');
+  }
+}
+
 async function loadProposalsList() {
   const container = document.getElementById('propuestas-list-container');
   container.innerHTML = '<p>Cargando...</p>';
@@ -126,20 +140,38 @@ async function loadProposalsList() {
       return;
     }
 
+    const grouped = {};
+    list.forEach(p => {
+      if (!grouped[p.uuid]) {
+        grouped[p.uuid] = { uuid: p.uuid, cliente: p.cliente, titulo: p.titulo, versions: [] };
+      }
+      grouped[p.uuid].versions.push(p);
+    });
+
     let html = `<table style="width:100%; border-collapse: collapse; margin-top:16px;">
       <tr style="border-bottom:1px solid var(--line); color:var(--muted); font-size:12px; text-align:left;">
-        <th style="padding:8px">Cliente</th>
-        <th style="padding:8px">Título</th>
-        <th style="padding:8px">Última Versión</th>
-        <th style="padding:8px">Acción</th>
+        <th style="padding:8px">Cliente / Título</th>
+        <th style="padding:8px">Versiones</th>
+        <th style="padding:8px; text-align:right;">Acciones</th>
       </tr>`;
     
-    list.forEach(p => {
+    Object.values(grouped).forEach(g => {
+      g.versions.sort((a, b) => b.version - a.version);
+      const latest = g.versions[0];
+      let versionsHtml = g.versions.map(v => 
+        `<span style="display:inline-block; margin:2px; padding:2px 6px; background:var(--paper-warm); border:1px solid var(--line); border-radius:4px; font-size:11px; color:var(--muted);" title="${new Date(v.created_at).toLocaleString()}">v${v.version}</span>`
+      ).join('');
+
       html += `<tr style="border-bottom:1px solid var(--line); font-size:14px;">
-        <td style="padding:12px 8px"><strong>${p.cliente}</strong></td>
-        <td style="padding:12px 8px">${p.titulo}</td>
-        <td style="padding:12px 8px">v${p.version}</td>
-        <td style="padding:12px 8px"><button class="btn-sm btn-outline" onclick="loadProposal('${p.uuid}')">Editar</button></td>
+        <td style="padding:12px 8px">
+          <strong>${g.cliente}</strong><br>
+          <span style="font-size:12px; color:var(--muted);">${g.titulo}</span>
+        </td>
+        <td style="padding:12px 8px">${versionsHtml}</td>
+        <td style="padding:12px 8px; text-align:right; white-space:nowrap;">
+          <button class="btn-sm btn-outline" style="margin-right:8px;" onclick="loadProposal('${g.uuid}')">Editar Última (v${latest.version})</button>
+          <button class="btn-sm" style="background:#ffeeee; color:#d32f2f; border:1px solid #ffcdd2;" onclick="deleteProposal('${g.uuid}')">Borrar</button>
+        </td>
       </tr>`;
     });
     html += `</table>`;
