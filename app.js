@@ -791,8 +791,8 @@ function generateHTML() {
   @media screen {
     .page-container { width:210mm; margin:10mm auto; background:#fff; box-shadow:var(--shadow-sm); position:relative; }
     .print-table { display: block; }
-    .print-table thead, .print-table tfoot { display: none; }
-    .print-table tbody, .print-table tr, .print-table td { display: block; width: 100%; }
+    .print-table > thead, .print-table > tfoot { display: none; }
+    .print-table > tbody, .print-table > tbody > tr, .print-table > tbody > tr > td { display: block; width: 100%; }
     .print-content { padding: 20mm !important; }
   }
 </style>
