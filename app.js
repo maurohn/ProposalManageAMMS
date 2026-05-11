@@ -60,6 +60,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnSave) {
     btnSave.addEventListener('click', saveToDB);
   }
+  const btnSavePreview = document.getElementById('btn-save-preview');
+  if (btnSavePreview) {
+    btnSavePreview.addEventListener('click', saveToDB);
+  }
   const btnRefresh = document.getElementById('btn-refresh-props');
   if (btnRefresh) {
     btnRefresh.addEventListener('click', loadProposalsList);
@@ -78,8 +82,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function saveToDB() {
   const btn = document.getElementById('btn-save');
-  const ogText = btn.innerHTML;
-  btn.innerHTML = 'Guardando...';
+  const btnPrev = document.getElementById('btn-save-preview');
+  
+  const ogText = btn ? btn.innerHTML : 'Guardar Versión';
+  const ogTextPrev = btnPrev ? btnPrev.innerHTML : 'Guardar Versión';
+  
+  if(btn) btn.innerHTML = 'Guardando...';
+  if(btnPrev) btnPrev.innerHTML = 'Guardando...';
+  
   try {
     const res = await fetch('http://localhost:3000/api/propuestas', {
       method: 'POST',
@@ -99,7 +109,8 @@ async function saveToDB() {
   } catch(e) {
     showToast('Error de conexión', 'warn');
   } finally {
-    btn.innerHTML = ogText;
+    if(btn) btn.innerHTML = ogText;
+    if(btnPrev) btnPrev.innerHTML = ogTextPrev;
   }
 }
 
@@ -721,7 +732,9 @@ function generateHTML() {
   .kpi .txt { margin-top:6px; font-size:11px; }
   .note { margin-top:12px; padding:14px; border-radius:16px; border:1px solid rgba(255,107,53,.20); background:rgba(255,107,53,.08); }
   .brand-footer { display:flex; justify-content:space-between; margin-top:18px; border-top:2px solid rgba(10,35,66,.08); padding-top:14px; font-size:11px; color:var(--muted); }
+  .brand-footer { display:flex; justify-content:space-between; margin-top:18px; border-top:2px solid rgba(10,35,66,.08); padding-top:14px; font-size:11px; color:var(--muted); }
   @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     body { background: #fff; }
     .page { box-shadow:none; margin:0; page-break-after: always; }
   }
