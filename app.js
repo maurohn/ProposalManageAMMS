@@ -821,6 +821,12 @@ function generateHTML() {
     </div>
     ` : ''}
 
+  </div>
+</section>
+
+<!-- PAGINA 2 -->
+<section class="page">
+  <div class="page-inner">
     <div class="section-header"><div class="section-number">${state.general.metodologia ? '2' : '1'}</div><h2>Estructura del equipo y valores hora</h2></div>
     <div style="border:1px solid var(--line); border-radius:18px; overflow:hidden;">
       <table>
@@ -865,19 +871,19 @@ function generateHTML() {
       </p>
     </div>
 
-    <div class="note">
+  </div>
+</section>
+
+<!-- PAGINA 3 -->
+<section class="page">
+  <div class="page-inner">
+    <div class="note" style="margin-bottom:24px;">
       <p style="margin:0; font-size:11px;">
         <strong>Modalidad:</strong> ${state.notas.modalidad}<br>
         <strong>Costos:</strong> ${state.notas.costos}<br>
         <strong>Ajuste:</strong> ${state.notas.ajuste}
       </p>
     </div>
-  </div>
-</section>
-
-<!-- PAGINA 2 -->
-<section class="page">
-  <div class="page-inner">
     <div class="section-header"><div class="section-number">${state.general.metodologia ? '4' : '3'}</div><h2>SLA, KPIs y calidad de servicio</h2></div>
     <div style="border:1px solid var(--line); border-radius:18px; overflow:hidden; margin-bottom:16px;">
       <table>
