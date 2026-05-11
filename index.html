@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMMS Group — Generador de Propuestas</title>
+  <meta name="description" content="Plataforma de generación de propuestas técnicas y económicas de AMMS Group con diseño premium y exportación PDF.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='0,0 100,0 50,50' fill='%231B2A3E'/><polygon points='100,0 100,100 50,50' fill='%23FF6040'/><polygon points='100,100 0,100 50,50' fill='%2300E5FF'/><polygon points='0,100 0,0 50,50' fill='%233D5068'/></svg>">
+</head>
+<body>
+
+  <!-- ═══ SIDEBAR NAV ═══ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo">
+        <svg viewBox="0 0 100 100" width="38" height="38">
+          <polygon points="0,0 100,0 50,50" fill="#1B2A3E"/>
+          <polygon points="100,0 100,100 50,50" fill="#FF6040"/>
+          <polygon points="100,100 0,100 50,50" fill="#00E5FF"/>
+          <polygon points="0,100 0,0 50,50" fill="#3D5068"/>
+        </svg>
+        <div>
+          <span class="brand-name">AMMS Group</span>
+          <span class="brand-sub">Proposal Engine</span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-btn active" data-panel="inicio">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <span>Inicio</span>
+      </button>
+      <button class="nav-btn" data-panel="mis-propuestas">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        <span>Mis Propuestas</span>
+      </button>
+      <div style="height: 1px; background: var(--line); margin: 16px 0;"></div>
+      <button class="nav-btn" data-panel="general" id="nav-general">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span>General</span>
+      </button>
+      <button class="nav-btn" data-panel="equipo" id="nav-equipo">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>Equipo</span>
+      </button>
+      <button class="nav-btn" data-panel="renglones" id="nav-renglones">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        <span>Renglones</span>
+      </button>
+      <button class="nav-btn" data-panel="contenido" id="nav-contenido">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        <span>Contenido</span>
+      </button>
+      <button class="nav-btn" data-panel="sla" id="nav-sla">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <span>SLA & KPIs</span>
+      </button>
+    </nav>
+  </aside>
+
+  <!-- ═══ MAIN CONTENT ═══ -->
+  <main class="main-content" id="main-content">
+
+    <!-- ── HEADER ── -->
+    <header class="main-header">
+      <div class="header-left">
+          <h2 id="current-tab-title">AMMS AI Generator</h2>
+        </div>
+        <div class="header-actions" style="display:flex; gap:12px; align-items:center;">
+          <button class="btn-action btn-save" id="btn-save" style="padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 13px; width: auto; height: auto;">
+            <svg style="margin-right:6px; vertical-align: middle;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Guardar Versión
+          </button>
+          <button class="btn-primary" id="btn-preview" style="padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 13px; border: none; cursor: pointer;">Vista Previa / PDF</button>
+        </div>
+      <div class="header-right">
+        <div class="stats-pill" id="stats-pill">
+          <div class="stat-item">
+            <span class="stat-label">Costo Total Mensual</span>
+            <span class="stat-value" id="hdr-costo">$ 0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Dotación</span>
+            <span class="stat-value" id="hdr-personas">0 per.</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT SCROLL AREA -->
+    <div class="main-scroll-area">
+      <!-- MIS PROPUESTAS PANEL -->
+      <div class="panel" id="panel-mis-propuestas" style="display:none;">
+        <div class="form-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h3 class="card-title" style="margin: 0;">Propuestas Guardadas</h3>
+            <button class="btn btn-outline" id="btn-refresh-props">Actualizar lista</button>
+          </div>
+          <div id="propuestas-list-container">
+            <p style="color: var(--muted); font-size: 0.9rem;">Cargando propuestas desde la base de datos...</p>
+          </div>
+        </div>
+      </div>
+
+    <!-- ── PANEL: INICIO / IA ── -->
+    <section class="panel active" id="panel-inicio">
+      <div class="form-grid">
+        <div class="form-card span-2">
+          <h3 class="card-title">Opción 1: Generar desde Pliego (PDF)</h3>
+          <p style="font-size: 0.85rem; color: var(--muted); margin-bottom: 16px;">Sube el PDF oficial de la licitación. La inteligencia artificial analizará el documento y completará toda la propuesta automáticamente.</p>
+          
+          <div style="border: 2px dashed var(--line); border-radius: var(--r-lg); padding: 40px; text-align: center; background: var(--paper-warm); margin-bottom: 16px; transition: all var(--dur) var(--ease);" id="drop-area">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--cyan-muted)" stroke-width="1.5" style="margin-bottom: 16px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
+            <h4 style="font-size: 1rem; color: var(--deep-navy); margin-bottom: 8px;">Arrastrá el PDF o hacé click</h4>
+            <p style="font-size: 0.8rem; color: var(--muted);">Formatos soportados: .pdf</p>
+            <input type="file" id="pdf-upload-main" accept="application/pdf" style="display: none;">
+            <button class="btn-sm btn-primary" style="margin-top: 16px; background: var(--cyan-electric); color: var(--deep-navy);" id="btn-trigger-upload">
+              Seleccionar Archivo
+            </button>
+          </div>
+        </div>
+
+        <div class="form-card span-2">
+          <h3 class="card-title">Opción 2: Generar por Contexto (Texto)</h3>
+          <p style="font-size: 0.85rem; color: var(--muted); margin-bottom: 16px;">Si no tenés un pliego formal, describí brevemente qué necesita el cliente y nosotros armaremos una estructura base.</p>
+          
+          <div class="field">
+            <textarea id="prompt-contexto" rows="4" placeholder="Ej: Necesitamos una propuesta para el Banco Provincia. Quieren armar un equipo de 3 desarrolladores Java Ssr, un QA y un PM por 6 meses para migrar un sistema core..."></textarea>
+          </div>
+          <button class="btn-sm btn-primary" id="btn-generate-text" style="margin-top: 12px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 2 13 9 20 9"/><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M12 18v-6"/><path d="M9 15l3 3 3-3"/></svg>
+            Generar Propuesta
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PANEL: GENERAL ── -->
+    <section class="panel" id="panel-general">
+      <div class="form-grid">
+        <div class="form-card span-2">
+          <h3 class="card-title">Información de la propuesta</h3>
+          <div class="field-row">
+            <div class="field">
+              <label for="prop-titulo">Título de la propuesta</label>
+              <input type="text" id="prop-titulo" value="Servicio de mantenimiento correctivo y evolutivo" placeholder="Título principal...">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="prop-subtitulo">Subtítulo / Sistemas</label>
+              <input type="text" id="prop-subtitulo" value="SAFIPRO, SI.CO.PRO y Co.Di.NEU" placeholder="Subtítulo...">
+            </div>
+          </div>
+          <div class="field-row two-col">
+            <div class="field">
+              <label for="prop-cliente">Cliente / Organismo</label>
+              <input type="text" id="prop-cliente" value="Contaduría General de la Provincia del Neuquén" placeholder="Nombre del cliente...">
+            </div>
+            <div class="field">
+              <label for="prop-expediente">Expediente / Licitación</label>
+              <input type="text" id="prop-expediente" value="PLIEG-2026-00785003" placeholder="Nº de expediente...">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <h3 class="card-title">Resumen ejecutivo</h3>
+          <div class="field">
+            <label for="prop-resumen">Descripción general</label>
+            <textarea id="prop-resumen" rows="6" placeholder="Resumen de la propuesta...">AMMS Group presenta una propuesta orientada a sostener la operación de sistemas críticos del Estado, acelerar la resolución de incidencias, evolucionar capacidades funcionales y acompañar una modernización progresiva sin comprometer la continuidad del servicio.</textarea>
+          </div>
+        </div>
+
+        <div class="form-card span-2">
+          <h3 class="card-title">Enfoque técnico y Metodología</h3>
+          <div class="field" style="margin-bottom: 14px;">
+            <label for="prop-enfoque">Descripción ejecutiva del enfoque</label>
+            <textarea id="prop-enfoque" rows="4" placeholder="Enfoque corto para la portada..."></textarea>
+          </div>
+          <div class="field">
+            <label for="prop-metodologia">Detalles de ejecución y Metodología de trabajo</label>
+            <textarea id="prop-metodologia" rows="8" placeholder="Detalle técnico profundo de cómo se va a realizar el trabajo, tecnologías a usar, metodologías, gobierno del proyecto..."></textarea>
+            <div id="metodologia-suggestions" class="suggestions-box" style="margin-top: 12px; display: flex; flex-direction: column; gap: 8px;">
+              <!-- AI methodology suggestions injected here -->
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card span-2">
+          <h3 class="card-title">Diferenciales</h3>
+          <p style="font-size: 0.8rem; color: var(--muted); margin-bottom: 12px;">Hacé click en las sugerencias para agregarlas, o escribí tus propios diferenciales personalizados.</p>
+          
+          <div class="suggestions-box" id="diferenciales-suggestions" style="margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 6px;">
+            <!-- Suggestions injected via JS -->
+          </div>
+
+          <div class="tags-editor" id="diferenciales-editor">
+            <div class="tag-input-wrap">
+              <input type="text" id="diferencial-input" placeholder="Escribir diferencial personalizado y presionar Enter...">
+              <button class="btn-sm btn-add-tag" id="btn-add-diferencial">+</button>
+            </div>
+            <div class="tag-list" id="diferenciales-list" style="margin-top: 10px;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PANEL: EQUIPO ── -->
+    <section class="panel" id="panel-equipo">
+      <div class="panel-toolbar">
+        <button class="btn-sm btn-primary" id="btn-add-perfil">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Agregar perfil
+        </button>
+      </div>
+      <div class="table-container" id="equipo-table-wrap">
+        <table class="data-table" id="equipo-table">
+          <thead>
+            <tr>
+              <th>Perfil</th>
+              <th class="center">Cant.</th>
+              <th class="center">Hs/mes c/u</th>
+              <th class="right">Valor hora</th>
+              <th class="right">Costo mensual</th>
+              <th>Responsabilidad</th>
+              <th class="center" style="width:60px">Acc.</th>
+            </tr>
+          </thead>
+          <tbody id="equipo-tbody"></tbody>
+          <tfoot id="equipo-tfoot"></tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── PANEL: RENGLONES ── -->
+    <section class="panel" id="panel-renglones">
+      <div class="panel-toolbar">
+        <button class="btn-sm btn-primary" id="btn-add-renglon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Agregar renglón
+        </button>
+      </div>
+      <div class="table-container">
+        <table class="data-table" id="renglones-table">
+          <thead>
+            <tr>
+              <th>Renglón</th>
+              <th>Servicio</th>
+              <th class="center">Porcentaje</th>
+              <th class="right">Monto Mensual</th>
+              <th class="center" style="width:60px">Acc.</th>
+            </tr>
+          </thead>
+          <tbody id="renglones-tbody"></tbody>
+        </table>
+      </div>
+      <div class="renglones-chart" id="renglones-chart"></div>
+    </section>
+
+    <!-- ── PANEL: CONTENIDO ── -->
+    <section class="panel" id="panel-contenido">
+      <div class="form-grid">
+        <div class="form-card span-2">
+          <h3 class="card-title">Capacidades del equipo</h3>
+          <div class="tags-editor" id="capacidades-editor">
+            <div class="tag-list" id="capacidades-list"></div>
+            <div class="tag-input-wrap">
+              <input type="text" id="capacidad-input" placeholder="Agregar capacidad y presionar Enter...">
+              <button class="btn-sm btn-add-tag" id="btn-add-capacidad">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card span-2">
+          <h3 class="card-title">Notas y condiciones</h3>
+          <div class="field">
+            <label for="nota-modalidad">Modalidad de trabajo</label>
+            <textarea id="nota-modalidad" rows="3">El trabajo se realizará de forma 100% remota. Solo se prevé presencia física (onsite) para reuniones de seguimiento, comités ejecutivos o casos especiales críticos.</textarea>
+          </div>
+          <div class="field">
+            <label for="nota-costos">Costos e impuestos</label>
+            <textarea id="nota-costos" rows="3">Todos los valores expresados se encuentran denominados en pesos argentinos (ARS) e incluyen IVA, conforme a lo requerido en el Pliego.</textarea>
+          </div>
+          <div class="field">
+            <label for="nota-ajuste">Ajuste salarial</label>
+            <textarea id="nota-ajuste" rows="3">El precio estipulado podrá ajustarse en caso de producirse un incremento salarial debidamente homologado, conforme la estructura de costos y la cláusula de reconocimiento de mayores costos del Pliego.</textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PANEL: SLA ── -->
+    <section class="panel" id="panel-sla">
+      <div class="form-grid">
+        <div class="form-card span-2">
+          <h3 class="card-title">SLA — Tiempos de respuesta y resolución</h3>
+          <div class="table-container">
+            <table class="data-table" id="sla-table">
+              <thead>
+                <tr>
+                  <th>Prioridad</th>
+                  <th>Tipo de incidente</th>
+                  <th class="center">Respuesta</th>
+                  <th class="center">Resolución</th>
+                </tr>
+              </thead>
+              <tbody id="sla-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="form-card span-2">
+          <h3 class="card-title">KPIs propuestos</h3>
+          <div class="kpi-grid" id="kpi-grid"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══ PREVIEW MODAL ═══ -->
+  <div class="preview-overlay" id="preview-overlay">
+    <div class="preview-toolbar">
+      <button class="btn-close-preview" id="btn-close-preview">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        Cerrar
+      </button>
+      <button class="btn-action btn-export" id="btn-print">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Imprimir / PDF
+      </button>
+    </div>
+    <div class="preview-frame-wrap">
+      <iframe id="preview-iframe" class="preview-frame"></iframe>
+    </div>
+  </div>
+
+  <!-- ═══ TOAST ═══ -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
