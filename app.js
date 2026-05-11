@@ -903,7 +903,7 @@ function generateHTML() {
     </div>
 
     <div class="brand-footer" style="margin-top:40px;">
-      <div><strong>AMMS Group</strong> — Generador de Propuestas</div>
+      <div><strong>AMMS Group</strong></div>
       <div>v${state.version || 1}.0</div>
     </div>
 
