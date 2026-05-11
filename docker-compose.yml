@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: amms_db
+    restart: always
+    environment:
+      POSTGRES_USER: amms_user
+      POSTGRES_PASSWORD: amms_password
+      POSTGRES_DB: amms_propuestas
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: amms_app
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DB_USER=amms_user
+      - DB_PASSWORD=amms_password
+      - DB_HOST=db
+      - DB_NAME=amms_propuestas
+      - DB_PORT=5432
+      # GEMINI_API_KEY will need to be provided either here or via a .env file on the server
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:

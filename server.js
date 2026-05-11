@@ -7,11 +7,11 @@ const { GoogleGenAI } = require('@google/genai');
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'amms_propuestas',
-  password: '', // Assuming no password for local dev
-  port: 5432,
+  user: process.env.DB_USER || 'postgres',
+  host: process.env.DB_HOST || 'localhost',
+  database: process.env.DB_NAME || 'amms_propuestas',
+  password: process.env.DB_PASSWORD || '',
+  port: process.env.DB_PORT || 5432,
 });
 
 // Initialize DB
@@ -28,7 +28,7 @@ pool.query(`
 `).catch(console.error);
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
