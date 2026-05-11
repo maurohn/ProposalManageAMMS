@@ -755,22 +755,23 @@ function generateHTML() {
   .stat { padding:12px; border-radius:14px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.10); }
   .stat .label { font-size:10px; text-transform:uppercase; color:rgba(255,255,255,.72); }
   .stat .value { margin-top:8px; font:800 20px/1.05 Montserrat, sans-serif; color:#fff; }
-  .section-header { display:flex; align-items:center; gap:12px; margin:18px 0 12px 0; }
+  .section-header { display:flex; align-items:center; gap:12px; margin:18px 0 12px 0; page-break-after: avoid; break-after: avoid; }
   .section-number { width:34px; height:34px; border-radius:10px; display:grid; place-items:center; background:var(--deep-navy); color:#fff; font-weight:800; }
   h2 { margin:0; color:var(--deep-navy); font:800 20px/1.2 Montserrat, sans-serif; }
-  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-  .card { background:#fff; border:1px solid var(--line); border-radius:18px; padding:16px; }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; page-break-inside: avoid; break-inside: avoid; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:18px; padding:16px; page-break-inside: avoid; break-inside: avoid; }
   .card.cyan { background:linear-gradient(180deg, rgba(0,240,255,.08), rgba(255,255,255,0)); }
   .card.orange { background:linear-gradient(180deg, rgba(255,107,53,.08), rgba(255,255,255,0)); }
   table { width:100%; border-collapse:collapse; font-size:11.1px; }
   thead th { background:var(--green-dark); color:#fff; text-align:left; padding:10px; font-weight:700; }
+  tbody tr { page-break-inside: avoid; break-inside: avoid; }
   tbody td { padding:10px; border-bottom:1px solid var(--line); }
   td.role { color:var(--deep-navy); font-weight:700; }
-  .kpi-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
+  .kpi-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; page-break-inside: avoid; break-inside: avoid; }
   .kpi { background:#fff; border:1px solid var(--line); border-radius:16px; padding:14px; text-align:center; }
   .kpi .num { color:var(--deep-navy); font:800 20px/1.05 Montserrat, sans-serif; }
   .kpi .txt { margin-top:6px; font-size:11px; }
-  .note { margin-top:12px; padding:14px; border-radius:16px; border:1px solid rgba(255,107,53,.20); background:rgba(255,107,53,.08); }
+  .note { margin-top:12px; padding:14px; border-radius:16px; border:1px solid rgba(255,107,53,.20); background:rgba(255,107,53,.08); page-break-inside: avoid; break-inside: avoid; }
   .brand-footer { display:flex; justify-content:space-between; margin-top:18px; border-top:2px solid rgba(10,35,66,.08); padding-top:14px; font-size:11px; color:var(--muted); }
   
   @page {
