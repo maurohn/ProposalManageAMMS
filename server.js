@@ -124,6 +124,84 @@ app.post('/api/analyze-pdf', upload.single('pdf'), async (req, res) => {
   }
 });
 
+app.post('/api/analyze-text', async (req, res) => {
+  try {
+    const { contexto } = req.body;
+    if (!contexto || !contexto.trim()) {
+      return res.status(400).json({ error: 'No se recibió contexto de texto' });
+    }
+
+    console.log('Analizando contexto de texto con Gemini...');
+
+    const prompt = `
+    Eres un experto comercial y técnico de AMMS Group.
+    A partir del siguiente contexto o descripción de una necesidad del cliente, generá una propuesta técnica y económica completa.
+    Devuelve la respuesta EXCLUSIVAMENTE en formato JSON válido, sin markdown, sin bloques de código, solo el JSON raw.
+    
+    El JSON debe tener EXACTAMENTE la siguiente estructura:
+    {
+      "titulo": "Título corto de la propuesta",
+      "subtitulo": "Sistemas o detalle secundario",
+      "cliente": "Nombre del cliente u organismo (deducilo del contexto o ponés 'A confirmar')",
+      "expediente": "Número de expediente si se menciona, sino dejá vacío",
+      "resumen": "Resumen ejecutivo de 3 o 4 líneas vendiendo a AMMS Group",
+      "enfoque": "Enfoque técnico (cómo vamos a resolver el problema)",
+      "sugerencias_metodologia": ["Párrafo 1 de sugerencia técnica profunda...", "Párrafo 2 sugerencia de metodología...", "Párrafo 3 sobre gobernanza..."],
+      "diferenciales": ["diferencial 1", "diferencial 2", "diferencial 3"],
+      "capacidades": ["capacidad 1", "capacidad 2"],
+      "renglones": [
+        { "id": "Renglón 1", "servicio": "Descripción", "porcentaje": 50 }
+      ],
+      "equipo": [
+        { "perfil": "Ej: Project Manager", "cantidad": 1, "horas": 40, "valor_hora": 50000, "responsabilidad": "Descripción corta" }
+      ]
+    }
+
+    Deducí los perfiles de equipo según las tecnologías y necesidades mencionadas.
+    Si no hay costos exactos, estimá valores razonables en pesos argentinos.
+
+    Contexto del cliente:
+    ${contexto}
+    `;
+
+    let response;
+    let retries = 3;
+    while (retries > 0) {
+      try {
+        response = await ai.models.generateContent({
+          model: 'gemini-2.5-flash-lite',
+          contents: prompt,
+          config: { temperature: 0.3 }
+        });
+        break;
+      } catch (err) {
+        if ((err.status === 503 || err.status === 429) && retries > 1) {
+          console.log(`Error ${err.status}, reintentando en 4 segundos...`);
+          await new Promise(r => setTimeout(r, 4000));
+          retries--;
+        } else {
+          throw err;
+        }
+      }
+    }
+
+    let jsonStr = response.text;
+    if (jsonStr.startsWith('```json')) {
+      jsonStr = jsonStr.replace(/```json\n?/, '').replace(/```$/, '');
+    } else if (jsonStr.startsWith('```')) {
+      jsonStr = jsonStr.replace(/```\n?/, '').replace(/```$/, '');
+    }
+
+    const resultData = JSON.parse(jsonStr.trim());
+    console.log('Análisis de texto exitoso.');
+    res.json(resultData);
+
+  } catch (error) {
+    console.error('Error analizando texto:', error);
+    res.status(500).json({ error: error.message || 'Error procesando el contexto' });
+  }
+});
+
 app.post('/api/propuestas', async (req, res) => {
   try {
     let { uuid, estado_json } = req.body;

@@ -564,6 +564,76 @@ function initAIUpload() {
   const input = document.getElementById('pdf-upload-main');
   const dropArea = document.getElementById('drop-area');
 
+  // ── Opción 2: Generar desde contexto texto ──
+  const btnGenerateText = document.getElementById('btn-generate-text');
+  if (btnGenerateText) {
+    btnGenerateText.addEventListener('click', async () => {
+      const textarea = document.getElementById('prompt-contexto');
+      const contexto = textarea ? textarea.value.trim() : '';
+
+      if (!contexto) {
+        showToast('Por favor escribí un contexto antes de generar.', 'warn');
+        return;
+      }
+
+      const originalHTML = btnGenerateText.innerHTML;
+      btnGenerateText.innerHTML = `<span class="spinner" style="display:inline-block; width:14px; height:14px; border:2px solid white; border-top-color:transparent; border-radius:50%; animation:spin 1s linear infinite;"></span> Generando...`;
+      btnGenerateText.style.pointerEvents = 'none';
+
+      if (!document.getElementById('spin-style')) {
+        const style = document.createElement('style');
+        style.id = 'spin-style';
+        style.innerHTML = `@keyframes spin { to { transform: rotate(360deg); } }`;
+        document.head.appendChild(style);
+      }
+
+      try {
+        showToast('Analizando contexto con Gemini AI...', 'info');
+        const res = await fetch('http://localhost:3000/api/analyze-text', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contexto })
+        });
+
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.error || 'Error al procesar el contexto');
+        }
+
+        const data = await res.json();
+
+        if (data.titulo)      state.general.titulo     = data.titulo;
+        if (data.subtitulo)   state.general.subtitulo  = data.subtitulo;
+        if (data.cliente)     state.general.cliente    = data.cliente;
+        if (data.expediente)  state.general.expediente = data.expediente;
+        if (data.resumen)     state.general.resumen    = data.resumen;
+        if (data.enfoque)     state.general.enfoque    = data.enfoque;
+        state.general.metodologia = '';
+        state.sugerencias_metodologia = data.sugerencias_metodologia || [];
+        state.diferenciales = data.diferenciales || [];
+        if (data.capacidades && data.capacidades.length) state.capacidades = data.capacidades;
+        if (data.equipo      && data.equipo.length)      state.equipo      = data.equipo.map((eq, i) => ({ id: 'eq-' + Date.now() + i, ...eq }));
+        if (data.renglones   && data.renglones.length)   state.renglones   = data.renglones;
+
+        initGeneralInputs();
+        initTags('diferenciales-editor', state.diferenciales);
+        initTags('capacidades-editor', state.capacidades);
+        renderEquipo();
+        renderRenglones();
+
+        showToast('Propuesta generada desde contexto con IA ✓', 'success');
+        document.getElementById('nav-general').click();
+
+      } catch (err) {
+        console.error(err);
+        showToast('Error: ' + err.message, 'warn');
+      } finally {
+        btnGenerateText.innerHTML = originalHTML;
+        btnGenerateText.style.pointerEvents = 'auto';
+      }
+    });
+  }
+
   if(btnTrigger) {
     btnTrigger.addEventListener('click', () => {
       input.click();
